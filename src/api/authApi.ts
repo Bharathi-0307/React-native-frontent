@@ -1,95 +1,161 @@
 import httpAxiosClient from '../config/httpclient';
 import { ApiResponseModel } from '../models/apiResponseModel';
 
+// Define interfaces for request/response types
+interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+interface RegisterData {
+  email: string;
+  password: string;
+  name: string;
+  // Add other registration fields as needed
+}
+
+interface OnboardingData {
+  // Define the structure of onboarding data
+  [key: string]: any;
+}
+
+interface TokenRefreshData {
+  token: string;
+}
+
 /**
- * Class representing the authentication API.
+ * Class representing the authentication API with enhanced error handling and type safety.
  */
 class AuthApi {
-  private authEndpoint: string;
-
-  constructor() {
-    this.authEndpoint = '/auth';
-  }
+  private readonly authEndpoint: string = '/auth';
 
   /**
-   * Method to handle user login.
-   * @param credentials - An object containing the user's email and password.
-   * @returns A promise that resolves to the response of the login request.
+   * Handle user login with credentials
    */
-  async login(credentials: {
-    email: string;
-    password: string;
-  }): Promise<ApiResponseModel> {
-    return await httpAxiosClient.post(
-      `${this.authEndpoint}/login`,
-      credentials,
-    );
+  async login(credentials: LoginCredentials): Promise<ApiResponseModel> {
+    try {
+      const response = await httpAxiosClient.post(
+        `${this.authEndpoint}/login`,
+        credentials
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Login failed:', error);
+      throw this.handleApiError(error);
+    }
   }
 
   /**
-   * Method to handle user registration.
-   * @param userData - An object containing the user's email, password, and name.
-   * @returns A promise that resolves to the response of the registration request.
+   * Handle user registration
    */
-  async register(userData: any): Promise<ApiResponseModel> {
-    return await httpAxiosClient.post(
-      `${this.authEndpoint}/register`,
-      userData,
-    );
+  async register(userData: RegisterData): Promise<ApiResponseModel> {
+    try {
+      const response = await httpAxiosClient.post(
+        `${this.authEndpoint}/register`,
+        userData
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Registration failed:', error);
+      throw this.handleApiError(error);
+    }
   }
 
   /**
-   * Method to handle user logout.
-   * @returns A promise that resolves to the response of the logout request.
+   * Handle user logout
    */
   async logout(): Promise<ApiResponseModel> {
-    return await httpAxiosClient.post(`${this.authEndpoint}/logout`);
+    try {
+      const response = await httpAxiosClient.post(`${this.authEndpoint}/logout`);
+      return response.data;
+    } catch (error) {
+      console.error('Logout failed:', error);
+      throw this.handleApiError(error);
+    }
   }
 
   /**
-   * Method to refresh the authentication token.
-   * @param token - The current authentication token.
-   * @returns A promise that resolves to the response of the token refresh request.
+   * Refresh authentication token
    */
   async refreshToken(token: string): Promise<ApiResponseModel> {
-    return await httpAxiosClient.post(`${this.authEndpoint}/refresh-token`, {
-      token,
-    });
+    try {
+      const response = await httpAxiosClient.post(
+        `${this.authEndpoint}/refresh-token`,
+        { token } as TokenRefreshData
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Token refresh failed:', error);
+      throw this.handleApiError(error);
+    }
   }
 
   /**
-   * Method to verify the user's role.
-   * @param role - The role to be verified.
-   * @returns A promise that resolves to the response of the role verification request.
+   * Verify user role
    */
   async verifyRole(role: string): Promise<ApiResponseModel> {
-    return await httpAxiosClient.get(`${this.authEndpoint}/verify-role`, {
-      params: {role},
-    });
+    try {
+      const response = await httpAxiosClient.get(
+        `${this.authEndpoint}/verify-role`,
+        { params: { role } }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Role verification failed:', error);
+      throw this.handleApiError(error);
+    }
   }
 
   /**
-   * Method to verify the user's email.
-   * @param email - The email to be verified.
-   * @returns A promise that resolves to the response of the email verification request.
+   * Verify user email
    */
   async verifyEmail(email: string): Promise<ApiResponseModel> {
-    return await httpAxiosClient.get(`${this.authEndpoint}/verify-email`, {
-      params: {email},
-    });
+    try {
+      const response = await httpAxiosClient.get(
+        `${this.authEndpoint}/verify-email`,
+        { params: { email } }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Email verification failed:', error);
+      throw this.handleApiError(error);
+    }
   }
 
   /**
-   * Method to complete the onboarding process.
-   * @param userInfo - The user information required to complete onboarding.
-   * @returns A promise that resolves to the response of the onboarding request.
+   * Complete onboarding process
    */
-  async completeOnboarding(userInfo: string): Promise<ApiResponseModel> {
-    return await httpAxiosClient.post(
-      `${this.authEndpoint}/complete-onboarding/`,
-      userInfo,
-    );
+  async completeOnboarding(userInfo: OnboardingData): Promise<ApiResponseModel> {
+    try {
+      const response = await httpAxiosClient.post(
+        `${this.authEndpoint}/complete-onboarding`,
+        userInfo
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Onboarding completion failed:', error);
+      throw this.handleApiError(error);
+    }
+  }
+
+  /**
+   * Handle API errors consistently
+   */
+  private handleApiError(error: any): Error {
+    // Customize error handling based on your API's error structure
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      const { status, data } = error.response;
+      return new Error(data.message || `API request failed with status ${status}`);
+    } else if (error.request) {
+      // The request was made but no response was received
+      return new Error('No response received from server');
+    } else {
+      // Something happened in setting up the request
+      return new Error(error.message || 'An unknown error occurred');
+    }
   }
 }
 
+// Export a singleton instance
 export default new AuthApi();

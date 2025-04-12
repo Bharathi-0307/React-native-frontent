@@ -2,6 +2,7 @@ import React from 'react';
 import {Image, StyleSheet} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import DashboardNavigator from './Dashboard/DashboardNavigator';
+import { ProductListScreen } from '../screens/Admin/ProductManagement/ProductListScreen';
 const dashboardIcon = require('../assets/images/favicon.png');
 const collaborationIcon = require('../assets/images/favicon.png');
 const profileIcon = require('../assets/images/favicon.png');
@@ -35,6 +36,8 @@ const AppNavigator = () => {
         tabBarShowLabel: false,
       })}>
       <Tab.Screen name="Dashboard" component={DashboardNavigator} />
+      <Tab.Screen name="ProductList" component={ProductListScreen} />
+
     </Tab.Navigator>
   );
 };

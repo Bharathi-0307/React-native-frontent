@@ -71,3 +71,29 @@ const doLogout = async (): Promise<boolean> => {
 };
 
 export default httpAxiosClient;
+
+
+
+
+
+// refrence  this
+
+// import axios from 'axios';
+// import { getToken } from '../utils/authStorage';
+
+// const httpAxiosClient = axios.create({
+//   baseURL: 'https://your-api.com/api', // Replace with actual base URL
+// });
+
+// httpAxiosClient.interceptors.request.use(
+//   async (config) => {
+//     const token = await getToken();
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`;
+//     }
+//     return config;
+//   },
+//   (error) => Promise.reject(error)
+// );
+
+// export default httpAxiosClient;
