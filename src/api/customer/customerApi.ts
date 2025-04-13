@@ -7,14 +7,14 @@ class CustomerApi {
   private customerEndpoint: string;
 
   constructor() {
-    this.customerEndpoint = '/customers';
+    this.customerEndpoint = '/auth/register';
   }
 
   async registerCustomer(
     customerData: CustomerRegistrationPayload
   ): Promise<ApiResponseModel> {
     return await httpAxiosClient.post(
-      `${this.customerEndpoint}/register`,
+      `${this.customerEndpoint}`,
       customerData
     );
   }
