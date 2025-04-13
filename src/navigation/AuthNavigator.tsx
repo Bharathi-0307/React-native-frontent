@@ -5,18 +5,13 @@ import SignupScreen from '../screens/Auth/RegisterScreen/SignupScreen';
 import RegisterStep1 from '../screens/Auth/CustomerRegistration/RegisterStep1';
 import RegisterStep2 from '../screens/Auth/CustomerRegistration/RegisterStep2';
 import RegisterStep3 from '../screens/Auth/CustomerRegistration/RegisterStep3';
-import { ProductListScreen } from '../screens/Admin/ProductManagement/ProductListScreen';
-import CustomerDashboardScreen from '../screens/Dashboard/CustomerDashboardScreen';
-
-// TEST FOR TEMP IMPORT 
-
 
 
 const Stack = createStackNavigator();
 
 const AuthNavigator = () => {
   return (
-    <Stack.Navigator initialRouteName="CustomerDashboard">
+    <Stack.Navigator initialRouteName="Login">
       <Stack.Screen
         name="Login"
         component={LoginScreen}
@@ -35,12 +30,6 @@ const AuthNavigator = () => {
 
       <Stack.Screen name="RegisterStep2" component={RegisterStep2} />
       <Stack.Screen name="RegisterStep3" component={RegisterStep3} />
-      <Stack.Screen name="ProductList" component={ProductListScreen} />
-      <Stack.Screen name="CustomerDashboard" component={CustomerDashboardScreen} />
-
-
-
-
     </Stack.Navigator>
   );
 };
