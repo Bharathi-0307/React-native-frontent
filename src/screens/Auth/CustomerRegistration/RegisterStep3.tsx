@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Alert, StyleSheet, Switch } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import axios from 'axios';
-import {
+import { useNavigation, useRoute } from '@react-navigation/native';import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { ApiResponseModel } from '../../../models/apiResponseModel';
+import CustomerService from '../../../services/customer/CustomerService';
 export default function RegisterStep3() {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
@@ -22,27 +22,42 @@ export default function RegisterStep3() {
     '6M': 24000,
     '12M': 48000
   };
+  const payload = {
+    name, email, mobile,
+    parentName, 
+    students,
+    plan,
+    price: plans[plan],
+  };
 
   const handleSubmit = async () => {
     if (!agree) return alert('You must agree to terms');
 
     const payload = {
-      name, email, mobile,
+      name, 
+      email, 
+      mobile,
       parentName,
       students,
       plan,
       price: plans[plan],
+      agreeTerms: agree 
     };
-
+    console.log('Payload:', payload);
+    let response: ApiResponseModel;
     try {
-      await axios.post('http://YOUR_SERVER_IP:5000/api/customers/register', payload);
-      Alert.alert('Success', 'Registration Complete');
-      navigation.navigate('Login');
+      response = await CustomerService.registerCustomer(payload);
+      if(response.success) {
+        console.log('Registration successful:', response.data);
+        Alert.alert('Success', 'Registration Complete');
+        navigation.navigate('Login');
+      }
     } catch (error) {
       console.error(error);
       Alert.alert('Error', 'Registration failed');
     }
   };
+
 
   return (
     <View style={styles.container}>
