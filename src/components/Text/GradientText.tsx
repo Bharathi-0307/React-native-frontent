@@ -38,9 +38,9 @@ const GradientText: React.FC<{
       <Svg height={fontSize * 1.2} width={svgWidth}>
         <Defs>
           <LinearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <Stop offset="0%" stopColor="#DB2533" stopOpacity="1" />
-            <Stop offset="50%" stopColor="#AB2959" stopOpacity="1" />
-            <Stop offset="100%" stopColor="#7C2D7E" stopOpacity="1" />
+            <Stop offset="0%" stopColor="#FF0000" stopOpacity="1" />
+            <Stop offset="50%" stopColor="#CC0000" stopOpacity="1" />
+            <Stop offset="100%" stopColor="#990000" stopOpacity="1" />
           </LinearGradient>
         </Defs>
         <SvgText
