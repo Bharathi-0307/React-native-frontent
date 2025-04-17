@@ -19,7 +19,15 @@ import {
 } from 'react-native-responsive-screen';
 import { colors } from '../../../config/colors';
 import { ApiResponseModel } from '../../../models/apiResponseModel';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+interface LoginResponse {
+  token: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+  };
+}
 const LoginScreen = ({ navigation, route }: { navigation: any; route: any }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,31 +38,35 @@ const LoginScreen = ({ navigation, route }: { navigation: any; route: any }) => 
     try {
       setIsLoading(true);
       validateEmail(email);
-
+  
       const loginData: LoginForm = {
           email,
           password,
       };
-     //  this is temproory fix for api response 
-        const response: any = await login(loginData.email, loginData.password);
-
-
+      const response: LoginResponse = await login(loginData.email, loginData.password);
       
-      if (response.success && response.data) {
-          Alert.alert('Login Successful', 'Welcome back!');
+      if (response.token) {
+        // Save the token and user data
+        await AsyncStorage.setItem('token', response.token);
+        await AsyncStorage.setItem('user', JSON.stringify(response.user));
+  
+        Alert.alert('Login Successful', 'Welcome back!');
+        navigation.navigate('dashboard'); 
       } else {
-          Alert.alert('Login Failed', response.message || 'An unknown error occurred');
+        Alert.alert('Login Failed', 'An unknown error occurred');
       }
     } catch (error) {
       if (error instanceof Error) {
-          Alert.alert('Error', error.message);
+        Alert.alert('Error', error.message);
       } else {
-          Alert.alert('Error', 'An unknown error occurred');
+        Alert.alert('Error', 'An unknown error occurred');
       }
     } finally {
       setIsLoading(false);
     }
   };
+  
+  
 
   return (
     <KeyboardAvoidingView 

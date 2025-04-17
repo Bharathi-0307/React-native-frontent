@@ -1,13 +1,21 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import AppNavigator from './AppNavigator';
 import AuthNavigator from './AuthNavigator';
 import { useAuth } from '../context/AuthContext';
 
 const MainNavigator = () => {
-  const {isLoggedIn, isProfileSetupDone, userId, isLoading} = useAuth();
+  const { isLoggedIn, isLoading } = useAuth();
 
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#3498db" />
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <NavigationContainer>
@@ -33,3 +41,4 @@ const styles = StyleSheet.create({
 });
 
 export default MainNavigator;
+

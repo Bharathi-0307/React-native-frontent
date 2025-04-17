@@ -6,6 +6,14 @@ interface LoginCredentials {
   email: string;
   password: string;
 }
+interface LoginResponse {
+  token: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+  };
+}
 
 interface RegisterData {
   email: string;
@@ -32,18 +40,26 @@ class AuthApi {
   /**
    * Handle user login with credentials
    */
-  async login(credentials: LoginCredentials): Promise<ApiResponseModel> {
-    try {
-      const response = await httpAxiosClient.post(
-        `${this.authEndpoint}/login`,
-        credentials
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Login failed:', error);
-      throw this.handleApiError(error);
+// Assuming that LoginCredentials and ApiResponseModel are defined somewhere in your code.
+
+
+async login(credentials: LoginCredentials): Promise<LoginResponse> {
+  try {
+    const response = await httpAxiosClient.post(`${this.authEndpoint}/login`, credentials);
+
+    // Check if the response is correctly structured
+    if (response && response.data && response.data.token && response.data.user) {
+      return response.data; // Return the token and user data directly
+    } else {
+      throw new Error('Invalid response structure');
     }
+  } catch (error) {
+    console.error('Login failed:', error);
+    // Handle and throw the error appropriately
+    throw this.handleApiError(error);
   }
+}
+
 
   /**
    * Handle user registration

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import {
-    widthPercentageToDP as wp,
-    heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
 export default function RegisterStep1() {
@@ -11,10 +11,12 @@ export default function RegisterStep1() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
+  const [password, setPassword] = useState('');
+
 
   const next = () => {
-    if (!name || !email || !mobile) return alert('Please fill all fields');
-    navigation.navigate('RegisterStep2', { name, email, mobile });
+    if (!name || !password || !email || !mobile) return alert('Please fill all fields');
+    navigation.navigate('RegisterStep2', { name, password, email, mobile });
   };
 
   return (
@@ -27,6 +29,15 @@ export default function RegisterStep1() {
         value={name}
         onChangeText={setName}
       />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry={true}
+      />
+
       <TextInput
         style={styles.input}
         placeholder="Email Address"

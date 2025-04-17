@@ -10,7 +10,7 @@ import CustomerService from '../../../services/customer/CustomerService';
 export default function RegisterStep3() {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
-  const { name, email, mobile, parentName, students } = route.params;
+  const { name,password, email, mobile, parentName, students } = route.params;
 
   const [plan, setPlan] = useState('1M');
   const [agree, setAgree] = useState(false);
@@ -28,36 +28,43 @@ export default function RegisterStep3() {
     students,
     plan,
     price: plans[plan],
+    agreeTerms: agree
+
   };
 
   const handleSubmit = async () => {
     if (!agree) return alert('You must agree to terms');
-
+  
     const payload = {
-      name, 
-      email, 
+      name,
+      email,
+      password,
       mobile,
       parentName,
       students,
       plan,
       price: plans[plan],
-      agreeTerms: agree 
+      agreeTerms: agree,
     };
-    console.log('Payload:', payload);
-    let response: ApiResponseModel;
+  
     try {
-      response = await CustomerService.registerCustomer(payload);
-      if(response.success) {
-        console.log('Registration successful:', response.data);
+      const res = await CustomerService.registerCustomer(payload);
+      const response = res.data; 
+  
+      console.log('API Response:', response);
+  
+      if (response?.user && response?.token) {
         Alert.alert('Success', 'Registration Complete');
         navigation.navigate('Login');
+      } else {
+        Alert.alert('Error', 'Something went wrong during registration');
       }
     } catch (error) {
-      console.error(error);
+      console.error('Registration failed:', error);
       Alert.alert('Error', 'Registration failed');
     }
   };
-
+  
 
   return (
     <View style={styles.container}>

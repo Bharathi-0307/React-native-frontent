@@ -8,7 +8,7 @@ import {
 export default function RegisterStep2() {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
-  const { name, email, mobile } = route.params;
+  const { name,password, email, mobile } = route.params;
 
   const [parentName, setParentName] = useState('');
   const [studentName, setStudentName] = useState('');
@@ -25,7 +25,7 @@ export default function RegisterStep2() {
   const next = () => {
     if (!parentName || students.length === 0) return alert('Add at least one student');
     navigation.navigate('RegisterStep3', {
-      name, email, mobile, parentName, students
+      name,password, email, mobile, parentName, students
     });
   };
 

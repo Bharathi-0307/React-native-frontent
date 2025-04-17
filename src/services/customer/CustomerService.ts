@@ -23,9 +23,10 @@ class CustomerService {
 
   static async getAvailableProducts(): Promise<ApiResponseModel> {
     try {
-      const response = await httpAxiosClient.get('/api/products/available');
+      const response = await httpAxiosClient.get('/products');
       
       return response.data;
+      cons
     } catch (error: any) {
       return {
         success: false,
@@ -39,7 +40,7 @@ class CustomerService {
 
   static async getCalendarSelections(): Promise<ApiResponseModel> {
     try {
-      const response = await httpAxiosClient.get('/api/orders/calendar');
+      const response = await httpAxiosClient.get('/orders/calendar');
       return response.data;
     } catch (error) {
       return {
@@ -57,7 +58,7 @@ class CustomerService {
     studentId: string;
   }): Promise<any> {
     try {
-      const response = await httpAxiosClient.post('/api/orders/calendar', payload);
+      const response = await httpAxiosClient.post('/orders/calendar', payload);
       return response.data;
     } catch (error) {
       return {

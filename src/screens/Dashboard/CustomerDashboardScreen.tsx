@@ -31,13 +31,11 @@ const CustomerDashboardScreen = () => {
   const [plan, setPlan] = useState('1M');
   const [calendarData, setCalendarData] = useState({});
 
-  // Fetch initial data
   useEffect(() => {
     fetchProducts();
     fetchCalendarData();
   }, []);
 
-  // Update dropdown when products change
   useEffect(() => {
     setDropdownItems(products.map(product => ({
       label: `${product.title} - ₹${product.price}`,
@@ -49,17 +47,18 @@ const CustomerDashboardScreen = () => {
     setLoading(true);
     try {
       const response = await CustomerService.getAvailableProducts();
-      if (response.success) {
-        setProducts(response.data);
-      } else {
-        Alert.alert('Error', response.message || 'Failed to fetch products');
-      }
+  
+      setProducts(response); 
+      console.log(response);
+  
     } catch (error) {
       Alert.alert('Error', 'Network error occurred');
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const fetchCalendarData = async () => {
     try {
